@@ -1,10 +1,9 @@
-# PHISHING URL DETECTION - PHASE 2
-## 1.Overview of Problem Statement:
+# PHISHING URL DETECTION
 
+## 1. Overview of Problem Statement:
 Phishing attacks are one of the most common cyber threats, costing individuals and organizations billions annually. Attackers use deceptive URLs to steal sensitive information like passwords, credit card details, and personal data. Traditional methods of detecting phishing URLs (e.g., blacklists) are reactive and fail to catch new threats. This project aims to build a proactive phishing detection system using machine learning to analyze URL features and classify them as malicious or safe.
 
 ## 2. Objective:
-
 Develop a machine learning model to classify URLs as phishing or legitimate based on features extracted from the URL and its metadata. The goal is to create a robust system that can detect phishing attempts in real-time, protecting users from cyber threats.
 
 ## 3. Data Description
@@ -67,31 +66,53 @@ This dataset contains multiple features extracted from URLs, their content, and 
 - **HasHiddenFields**: Whether the page contains hidden form fields.  
 - **HasPasswordField**: Whether the page has an input field for passwords.  
 
-### Financial & Phishing Keywords
-- **Bank**: Whether the URL contains bank-related words (1 = Yes).  
-- **Pay**: Whether the URL contains payment-related words (1 = Yes).  
-- **Crypto**: Whether the URL contains cryptocurrency-related words (1 = Yes).  
-
-### Multimedia & External Links
-- **HasCopyrightInfo**: Whether the page has copyright information.  
-- **NoOfImage**: Number of images on the webpage.  
-- **NoOfCSS**: Number of CSS files linked in the HTML.  
-- **NoOfJS**: Number of JavaScript files linked in the HTML.  
-- **NoOfSelfRef**: Number of self-referencing links in the HTML.  
-- **NoOfEmptyRef**: Number of empty or broken links.  
-- **NoOfExternalRef**: Number of links pointing to external domains.  
-
 ### Target Variable
 - **label**: The classification of the URL:  
   - **1 → Legitimate**  
-  - **0 → Phishing**
+  - **0 → Phishing**  
 
 ---
-## Usage Instructions
-1. Load the dataset using `pandas`.  
-2. Perform data preprocessing, including handling missing values, outlier removal, and feature scaling.  
-3. Conduct Exploratory Data Analysis (EDA) to identify key insights.  
-4. Apply feature engineering and selection techniques.  
-5. Split the dataset into train and test data.
+## 4. Process Followed
+
+### **Data Preprocessing**
+1. Loaded the dataset and examined missing values.
+2. Handled missing values by imputing where necessary.
+3. Removed duplicate entries from the dataset.
+4. Removed unwanted features.
+
+### **Outlier Detection & Treatment**
+1. Identified outliers using statistical techniques.
+2. Performed data transformations to normalize the distribution of numerical features.
+3. Applied outlier clipping to prevent extreme values from influencing the model.
+
+### **Exploratory Data Analysis (EDA)**
+1. Generated visualizations to understand feature distributions.
+2. Plotted boxplots to visualize outliers for non-binary features.
+3. Analyzed relationships between various URL characteristics and phishing behavior.
+
+### **Feature Engineering & Selection**
+1. Identified and removed irrelevant or highly correlated features.
+2. Performed feature scaling using StandardScaler.
+3. Used SelectKBest for feature selection to retain the most important features.
+
+### **Model Training & Evaluation**
+1. Split data into training and testing sets.
+2. Applied Principal Component Analysis (PCA) for dimensionality reduction in certain models.
+3. Trained multiple machine learning models: Logistic Regression, SVM, Random Forest, Gradient Boosting, XGBoost, and Decision Tree.
+4. Evaluated models based on:
+   - Accuracy
+   - Precision
+   - Recall
+   - F1 Score
+5. Tuned hyperparameters to improve model performance.
+6. Identified **XGBoost** as the best-performing model with **99.99% accuracy, precision, recall, and F1 score**.
+
+### **Final Model Selection & Optimization**
+1. Applied further tuning to reduce overfitting in all models.
+2. Optimized XGBoost parameters to achieve maximum performance.
+3. Developed a Django-based web interface for real-time URL classification.
+
 ---
+## Next Steps
+1. Conduct further testing with unseen phishing datasets.
 
