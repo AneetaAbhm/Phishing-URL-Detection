@@ -1,118 +1,199 @@
-# PHISHING URL DETECTION
 
-## 1. Overview of Problem Statement:
-Phishing attacks are one of the most common cyber threats, costing individuals and organizations billions annually. Attackers use deceptive URLs to steal sensitive information like passwords, credit card details, and personal data. Traditional methods of detecting phishing URLs (e.g., blacklists) are reactive and fail to catch new threats. This project aims to build a proactive phishing detection system using machine learning to analyze URL features and classify them as malicious or safe.
 
-## 2. Objective:
-Develop a machine learning model to classify URLs as phishing or legitimate based on features extracted from the URL and its metadata. The goal is to create a robust system that can detect phishing attempts in real-time, protecting users from cyber threats.
+#  **PHISHING URL DETECTION**
 
-## 3. Data Description
-This dataset contains multiple features extracted from URLs, their content, and web page behavior to help classify URLs as either **legitimate** or **phishing**. Below is a detailed explanation of each feature:
+---
 
-### URL & Domain-Based Features
-- **FILENAME**: Name of the file containing the dataset entry.  
+## 1. **Overview of Problem Statement**
+Phishing attacks are one of the most common cyber threats, costing individuals and organizations billions annually. Attackers use deceptive URLs to steal sensitive information like passwords, credit card details, and personal data.  
+Traditional methods like blacklists fail to catch newly emerging phishing URLs. Therefore, this project leverages **machine learning** to create a proactive phishing detection system by analyzing URL features and classifying them as either **phishing** or **legitimate**.
+
+---
+
+## 2. **Objective**
+Develop a robust machine learning model to classify URLs as either **phishing** or **legitimate** based on their characteristics and metadata.  
+The system is designed for **real-time classification**, offering protection against evolving phishing techniques by detecting suspicious patterns and behaviors.
+
+---
+
+## 3. **Data Description**
+The dataset consists of **URL-based, content-based, and website behavior-based** features to identify phishing patterns. Below is a detailed explanation of the key features:
+
+### **URL & Domain-Based Features**
 - **URL**: The full web address being analyzed.  
-- **URLLength**: Total length of the URL (longer URLs may be suspicious).  
-- **Domain**: The main domain of the URL (e.g., example.com).  
-- **DomainLength**: Length of the domain (long domains can indicate phishing).  
-- **IsDomainIP**: Whether the domain is an IP address (1 = Yes, 0 = No).  
-- **TLD**: The top-level domain (e.g., .com, .org, .xyz).  
-- **TLDLegitimateProb**: Probability of the TLD being legitimate based on past data.  
+- **URLLength**: Length of the URL string.  
+- **Domain**: The main domain of the URL (e.g., `example.com`).  
+- **DomainLength**: Length of the domain name.  
+- **IsDomainIP**: Indicates if the domain is an IP address (1 = Yes, 0 = No).  
+- **TLD**: Top-level domain (e.g., `.com`, `.org`).  
+- **TLDLegitimateProb**: Probability that the TLD is legitimate.  
+- **NoOfSubDomain**: Number of subdomains.  
+- **IsHTTPS**: Indicates whether the URL uses HTTPS (1 = Yes, 0 = No).  
 
-### Character-Based Features
-- **URLSimilarityIndex**: Similarity score with known trusted URLs.  
-- **CharContinuationRate**: Measures repeated character patterns in the URL.  
-- **URLCharProb**: Probability distribution of characters in the URL.  
-- **TLDLength**: Length of the top-level domain.  
-- **NoOfSubDomain**: Number of subdomains (more subdomains can indicate phishing).  
-- **HasObfuscation**: Whether the URL contains obfuscation techniques (1 = Yes).  
-- **NoOfObfuscatedChar**: Number of obfuscated characters in the URL.  
-- **ObfuscationRatio**: Ratio of obfuscated characters to total URL length.  
-- **NoOfLettersInURL**: Count of alphabetic characters in the URL.  
-- **LetterRatioInURL**: Ratio of letters to the total URL length.  
-- **NoOfDigitsInURL**: Number of numeric digits in the URL.  
-- **DigitRatioInURL**: Ratio of numeric digits to the total URL length.  
-- **NoOfEqualsInURL**: Number of '=' characters in the URL (used in tracking links).  
-- **NoOfQMarkInURL**: Number of '?' characters (common in phishing).  
-- **NoOfAmpersandInURL**: Number of '&' characters in the URL.  
-- **NoOfOtherSpecialCharsInURL**: Count of other special characters (@, %, etc.).  
-- **SpecialCharRatioInURL**: Ratio of special characters to total URL length.  
+### **Character-Based Features**
+- **NoOfLettersInURL**: Number of alphabetic characters in the URL.  
+- **NoOfDigitsInURL**: Number of numeric digits.  
+- **DigitRatioInURL**: Ratio of digits to total URL length.  
+- **SpecialCharRatioInURL**: Ratio of special characters in the URL.  
+- **NoOfEqualsInURL**: Number of `=` characters.  
+- **NoOfQMarkInURL**: Number of `?` characters.  
+- **NoOfAmpersandInURL**: Number of `&` characters.  
 
-### Security & HTTPS Features
-- **IsHTTPS**: Whether the URL uses HTTPS (1 = Yes, 0 = No).  
+### **Web Page Content & Behavior Features**
+- **HasTitle**: Whether the webpage has a `<title>` tag.  
+- **TitleLength**: Length of the `<title>` tag content.  
+- **HasFavicon**: Whether the page has a favicon.  
+- **NoOfPopup**: Number of pop-ups on the webpage.  
+- **NoOfiFrame**: Number of `<iframe>` elements.  
+- **NoOfRedirects**: Number of redirects.  
+- **HasSocialNet**: Indicates if the page has social media links.  
+- **HasPasswordField**: Whether the page has a password input field.  
 
-### Web Page Content Features
-- **LineOfCode**: Number of lines in the HTML source code.  
-- **LargestLineLength**: Length of the longest line in the source code.  
-- **HasTitle**: Whether the web page has a `<title>` tag (1 = Yes).  
-- **Title**: The text inside the `<title>` tag.  
-- **DomainTitleMatchScore**: Similarity score between domain name and page title.  
-- **URLTitleMatchScore**: Similarity score between URL and page title.  
-- **HasFavicon**: Whether the page has a favicon (1 = Yes).  
-
-### Website Behavior Features
-- **Robots**: Whether the website has a `robots.txt` file (1 = Yes).  
-- **IsResponsive**: Whether the website is mobile-responsive (1 = Yes).  
-- **NoOfURLRedirect**: Number of times the URL redirects.  
-- **NoOfSelfRedirect**: Number of self-redirects within the same domain.  
-
-### Social & Interactive Features
-- **HasDescription**: Whether the page has a meta description (1 = Yes).  
-- **NoOfPopup**: Number of pop-ups on the website.  
-- **NoOfiFrame**: Number of `<iframe>` elements (often used in phishing).  
-- **HasExternalFormSubmit**: Whether the page submits data to an external domain.  
-- **HasSocialNet**: Whether the page contains social media links.  
-- **HasSubmitButton**: Whether the page has a submit button (1 = Yes).  
-- **HasHiddenFields**: Whether the page contains hidden form fields.  
-- **HasPasswordField**: Whether the page has an input field for passwords.  
-
-### Target Variable
-- **label**: The classification of the URL:  
-  - **1 → Legitimate**  
-  - **0 → Phishing**  
+### **Target Variable**
+- **Label:**  
+  - `0 → Phishy`  
+  - `1 → Legitimate`  
 
 ---
-## 4. Process Followed
 
-### **Data Preprocessing**
-1. Loaded the dataset and examined missing values.
-2. Handled missing values by imputing where necessary.
-3. Removed duplicate entries from the dataset.
-4. Removed unwanted features.
+## 4. **Data Collection**
+- The dataset used for this project was sourced from the **UCI Machine Learning Repository**.  
+- It contains a combination of **URL metadata, web page features, and website behavior metrics** for phishing and legitimate URLs.  
+- The dataset was downloaded in **CSV format** and used for further processing.
+---
 
-### **Outlier Detection & Treatment**
-1. Identified outliers using statistical techniques.
-2. Performed data transformations to normalize the distribution of numerical features.
-3. Applied outlier clipping to prevent extreme values from influencing the model.
-
-### **Exploratory Data Analysis (EDA)**
-1. Generated visualizations to understand feature distributions.
-2. Plotted boxplots to visualize outliers for non-binary features.
-3. Analyzed relationships between various URL characteristics and phishing behavior.
-
-### **Feature Engineering & Selection**
-1. Identified and removed irrelevant or highly correlated features.
-2. Performed feature scaling using StandardScaler.
-3. Used SelectKBest for feature selection to retain the most important features.
-
-### **Model Training & Evaluation**
-1. Split data into training and testing sets.
-2. Applied Principal Component Analysis (PCA) for dimensionality reduction in certain models.
-3. Trained multiple machine learning models: Logistic Regression, SVM, Random Forest, Gradient Boosting, XGBoost, and Decision Tree.
-4. Evaluated models based on:
-   - Accuracy
-   - Precision
-   - Recall
-   - F1 Score
-5. Tuned hyperparameters to improve model performance.
-6. Identified **XGBoost** as the best-performing model with **99.99% accuracy, precision, recall, and F1 score**.
-
-### **Final Model Selection & Optimization**
-1. Applied further tuning to reduce overfitting in all models.
-2. Optimized XGBoost parameters to achieve maximum performance.
-3. Developed a Django-based web interface for real-time URL classification.
+## 5. **Data Preprocessing - Data Cleaning**
+1. **Loading and Cleaning Data:**  
+   - Loaded the dataset using `pandas`.  
+   - Examined missing values and duplicates.  
+   - Applied **SimpleImputer** to fill missing values with the mean.  
+   - Removed irrelevant features and duplicate entries.
 
 ---
-## Next Steps
-1. Conduct further testing with unseen phishing datasets.
 
+## 6. **Exploratory Data Analysis (EDA)**
+
+1. **Distribution Analysis:**  
+   - Visualized the distribution of legitimate vs. phishing URLs.  
+   - Examined feature distributions with histograms and box plots.  
+
+2. **Outlier Detection & Treatment:**  
+   - Identified outliers using **IQR** and **z-score** methods.  
+   - Applied **outlier clipping** to reduce the influence of extreme values.  
+   - Performed **Box-Cox** and **square transformations** to normalize skewed features and improve model stability.
+     
+3. **Correlation Analysis:**  
+   - Calculated the **correlation matrix** to identify relationships between features.  
+   - Visualized the matrix using a **heatmap** to detect multicollinearity.  
+   - Removed or combined highly correlated features to reduce redundancy and prevent overfitting.  
+   - 
+## 7. **Split Data into Training and Testing Sets**
+- Split the dataset into:
+    X → Features
+    y → Target variable (Label)
+- Applied SMOTE (Synthetic Minority Over-sampling Technique) to balance the classes.
+- Split the dataset into **80% training** and **20% testing** data.  
+- Ensured **stratified splitting** to maintain class distribution.
+
+---
+
+## 8. **Feature Scaling**
+- Standardized numerical features using **StandardScaler**.  
+- Ensured consistent scaling across features to prevent magnitude bias.
+
+---
+
+## 9. **Feature Selection**
+1. **Feature Importance Analysis:**  
+   - Applied **SelectKBest** with `f_classif` scoring function.  
+   - Selected the **24 most relevant features**.  
+   - Ensured consistent feature names during transformations.  
+   - Manually added the TLDLegitimateProb feature based on its high custom score, indicating strong predictive relevance.
+   - Combined the 24 selected features with the manually added feature, resulting in 25 final features used for model training.
+---
+
+## 10. **Model Building**
+1. **Model Selection:**  
+   - Trained multiple models to compare performance:  
+     - **Logistic Regression**  
+     - **SVM (Support Vector Machine)**  
+     - **Random Forest**  
+     - **Gradient Boosting**  
+     - **XGBoost**  
+     - **Decision Tree**  
+
+---
+
+## 11. **Model Evaluation**
+1. **Evaluation Metrics:**  
+   - **Accuracy:** Measures overall correctness.  
+   - **Precision:** Measures true positives out of all predicted positives.  
+   - **Recall:** Measures true positives out of actual positives.  
+   - **F1 Score:** Harmonic mean of precision and recall.
+
+---
+
+## 12. **Hyperparameter Tuning**
+1. **Random Forest Optimization:**  
+   - Used **RandomizedSearchCV** to reduce execution time.  
+   - Tuned parameters:  
+     - `n_estimators`: Number of trees.  
+     - `max_depth`: Limits tree depth to prevent overfitting.  
+     - `min_samples_split`: Minimum samples required to split a node.  
+     - `min_samples_leaf`: Minimum samples required for a leaf.  
+     - `max_features`: Number of features for the best split.  
+     - `bootstrap`: Whether to use bootstrapping.  
+
+2. **Best Hyperparameters:**
+```python
+{
+    'n_estimators': 200, 
+    'max_depth': 10, 
+    'min_samples_split': 5, 
+    'min_samples_leaf': 2, 
+    'max_features': 'sqrt', 
+    'bootstrap': True
+}
+```
+
+---
+
+## 13. **Save the Model**
+1. Created a **scikit-learn pipeline** combining:  
+   - **SimpleImputer** for missing values.  
+   - **StandardScaler** for feature scaling.  
+   - **RandomForestClassifier** with optimized hyperparameters.  
+2. Saved the pipeline as a **.pkl** file for future predictions.
+
+---
+
+## 14. **Test with Unseen Data**
+1. Applied the model to **unseen data samples**.  
+2. Achieved consistent accuracy of **99.94%** across multiple unseen samples.  
+3. Saved predictions along with features into a CSV file.  
+
+---
+
+## 15. **Interpretation of Results: Unseen Data Predictions Analysis**
+1. Analyzed predictions with actual labels.  
+2. Verified model performance on unseen data using metrics:  
+   - **Accuracy:** 99.94%  
+   - **Precision:** 99.91%  
+   - **Recall:** 99.95%  
+   - **F1 Score:** 99.93%  
+3. Displayed results with **confidence scores** for each URL.
+
+---
+
+## 16. **Future Work**
+1. **Testing on Real-World Data:**  
+   - Validate the model with real-world phishing datasets.  
+   - Include additional **WHOIS data, DNS records, and website load times**.  
+
+2. **Model Deployment:**  
+   - Deploy the Django-based web app to a cloud platform (AWS or Heroku).  
+   - Implement **continuous model improvement** with new training data.  
+
+---
+
+✅ **This project successfully demonstrates the effectiveness of machine learning in identifying phishing threats with high accuracy and real-time prediction capabilities.** 🚀
