@@ -86,7 +86,7 @@ The dataset consists of **URL-based, content-based, and website behavior-based**
    - Calculated the **correlation matrix** to identify relationships between features.  
    - Visualized the matrix using a **heatmap** to detect multicollinearity.  
    - Removed or combined highly correlated features to reduce redundancy and prevent overfitting.  
-   - 
+     
 ## 7. **Split Data into Training and Testing Sets**
 - Split the dataset into:
     X → Features
@@ -108,8 +108,8 @@ The dataset consists of **URL-based, content-based, and website behavior-based**
    - Applied **SelectKBest** with `f_classif` scoring function.  
    - Selected the **24 most relevant features**.  
    - Ensured consistent feature names during transformations.  
-   - Manually added the TLDLegitimateProb feature based on its high custom score, indicating strong predictive relevance.
-   - Combined the 24 selected features with the manually added feature, resulting in 25 final features used for model training.
+   - Manually added the TLDLegitimateProb feature based on its **high custom score**, indicating strong predictive relevance.
+   - Combined the 24 selected features with the manually added feature, resulting in **25 final features** used for model training.
 ---
 
 ## 10. **Model Building**
@@ -130,31 +130,37 @@ The dataset consists of **URL-based, content-based, and website behavior-based**
    - **Precision:** Measures true positives out of all predicted positives.  
    - **Recall:** Measures true positives out of actual positives.  
    - **F1 Score:** Harmonic mean of precision and recall.
+- Found that Random Forest is the best-performing model, achieving near-perfect generalization with the highest accuracy, precision, and recall.
 
 ---
 
-## 12. **Hyperparameter Tuning**
+## 12. **Hyperparameter Tuning & Optimization**
 1. **Random Forest Optimization:**  
-   - Used **RandomizedSearchCV** to reduce execution time.  
+   - Used **RandomizedSearchCV** for hyperparameter tuning to reduce execution time.  
    - Tuned parameters:  
      - `n_estimators`: Number of trees.  
      - `max_depth`: Limits tree depth to prevent overfitting.  
-     - `min_samples_split`: Minimum samples required to split a node.  
-     - `min_samples_leaf`: Minimum samples required for a leaf.  
-     - `max_features`: Number of features for the best split.  
-     - `bootstrap`: Whether to use bootstrapping.  
+     - `min_samples_split`: Minimum samples required to split an internal node.  
+     - `min_samples_leaf`: Minimum samples required for a leaf node.  
+     - `max_features`: Number of features considered for the best split.  
+     - `bootstrap`: Whether to use bootstrapping when building trees.  
+   - **Best Parameters Found:**  
+     ```python
+     {'n_estimators': 150, 
+      'min_samples_split': 2, 
+      'min_samples_leaf': 1, 
+      'max_features': 'log2', 
+      'max_depth': 15, 
+      'bootstrap': True}
+     ```
 
-2. **Best Hyperparameters:**
-```python
-{
-    'n_estimators': 200, 
-    'max_depth': 10, 
-    'min_samples_split': 5, 
-    'min_samples_leaf': 2, 
-    'max_features': 'sqrt', 
-    'bootstrap': True
-}
-```
+2. **Final Model Performance:**  
+   - **Accuracy:** 99.94%  
+   - **Precision:** 99.91%  
+   - **Recall:** 99.96%  
+   - **F1 Score:** 99.94%  
+
+---
 
 ---
 
@@ -163,14 +169,13 @@ The dataset consists of **URL-based, content-based, and website behavior-based**
    - **SimpleImputer** for missing values.  
    - **StandardScaler** for feature scaling.  
    - **RandomForestClassifier** with optimized hyperparameters.  
-2. Saved the pipeline as a **.pkl** file for future predictions.
+2. Saved the pipeline as a **.joblib** file for future predictions.
 
 ---
 
 ## 14. **Test with Unseen Data**
 1. Applied the model to **unseen data samples**.  
-2. Achieved consistent accuracy of **99.94%** across multiple unseen samples.  
-3. Saved predictions along with features into a CSV file.  
+2. Saved predictions along with features into a CSV file.  
 
 ---
 
@@ -181,7 +186,6 @@ The dataset consists of **URL-based, content-based, and website behavior-based**
    - **Precision:** 99.91%  
    - **Recall:** 99.95%  
    - **F1 Score:** 99.93%  
-3. Displayed results with **confidence scores** for each URL.
 
 ---
 
@@ -196,4 +200,5 @@ The dataset consists of **URL-based, content-based, and website behavior-based**
 
 ---
 
-✅ **This project successfully demonstrates the effectiveness of machine learning in identifying phishing threats with high accuracy and real-time prediction capabilities.** 🚀
+ **This project successfully demonstrates the effectiveness of machine learning in identifying phishing threats with high accuracy and real-time prediction capabilities.** 
+
